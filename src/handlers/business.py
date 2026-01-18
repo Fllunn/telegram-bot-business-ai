@@ -6,6 +6,7 @@ import telebot
 from ..bot.client import bot
 from ..config.settings import OWNER_ID
 from ..core import state
+from ..utils.logger import logger
 from ..services.auto_reply import auto_reply
 
 
@@ -23,18 +24,8 @@ from ..services.auto_reply import auto_reply
 ])
 def handle_business_message(message: telebot.types.Message) -> None:
     """
-    Обрабатывает новые бизнес-сообщения логирует их и при необходимости запускает таймер для автоответа.
+    Обрабатывает новые бизнес-сообщения и при необходимости запускает таймер для автоответа.
     """
-    # print(f"\n[BUSINESS_MESSAGE_RECEIVED]")
-    # print(f"  from_user.id: {message.from_user.id}")
-    # print(f"  from_user.username: {message.from_user.username}")
-    # print(f"  chat.id: {message.chat.id}")
-    # print(f"  business_connection_id: {message.business_connection_id}")
-    # print(f"  message_id: {message.message_id}")
-    # print(f"  content_type: {message.content_type}")
-    # if message.content_type == "text":
-    #     print(f"  text: {message.text}")
-    
     chat_id = message.chat.id
     bc_id = message.business_connection_id
     from_user_id = message.from_user.id
@@ -86,11 +77,10 @@ def handle_business_message(message: telebot.types.Message) -> None:
         if chat_id in state.auto_reply_timers:
             t = state.auto_reply_timers.pop(chat_id)
             t.cancel()
-            print(f"[Cancel Timer] Владелец ответил сам, отменяем таймер в чате {chat_id}.")
+            logger.debug(f"Owner replied in chat {chat_id}, canceled auto reply timer")
         return
 
     if not state.auto_reply_enabled:
-        print("[BusinessMessage] Автоответ выключен, выходим.")
         return
 
     if ctype == "text":
@@ -102,5 +92,3 @@ def handle_business_message(message: telebot.types.Message) -> None:
         new_t = threading.Timer(state.AUTO_REPLY_DELAY, auto_reply, args=(chat_id, bc_id))
         state.auto_reply_timers[chat_id] = new_t
         new_t.start()
-    else:
-        pass

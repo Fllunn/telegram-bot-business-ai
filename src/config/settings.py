@@ -14,11 +14,10 @@ ALLOWED_USERS = set()
 if _allowed_users_str.strip():
     try:
         ALLOWED_USERS = {int(uid.strip()) for uid in _allowed_users_str.split(",") if uid.strip()}
-        print(f"[CONFIG] ALLOWED_USERS loaded: {ALLOWED_USERS}")
     except ValueError:
-        print("Ошибка при парсинге ALLOWED_USERS. Проверьте формат в .env")
+        pass
 else:
-    print("[CONFIG] ALLOWED_USERS is empty - all users allowed")
+    pass
 
 
 def is_user_allowed(user_id: int) -> bool:

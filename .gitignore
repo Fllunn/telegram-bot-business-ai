@@ -133,3 +133,4 @@ Thumbs.db
 *.txt.bak
 config.local.py
 chat_histories.json
+logs/
