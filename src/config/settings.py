@@ -6,6 +6,8 @@ load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+PROXYAPI_API_KEY = os.getenv("PROXYAPI_API_KEY", OPENAI_API_KEY)
+PROXYAPI_BASE_URL = os.getenv("PROXYAPI_BASE_URL", "https://openai.api.proxyapi.ru/v1")
 OWNER_ID = int(os.getenv("OWNER_ID", "2342342"))
 
 # Получаем список разрешенных пользователей

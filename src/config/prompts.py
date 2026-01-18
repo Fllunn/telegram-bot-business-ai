@@ -1,5 +1,5 @@
-# Модель ИИ
-AI_MODEL = "gpt-4"
+# Модель ИИ https://proxyapi.ru/pricing/list
+AI_MODEL = "openai/gpt-4o-mini"
 
 # Системный промпт
 SYSTEM_PROMPT = (
