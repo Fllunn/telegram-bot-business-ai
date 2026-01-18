@@ -89,6 +89,6 @@ def handle_business_message(message: telebot.types.Message) -> None:
             old_t = state.auto_reply_timers.pop(chat_id)
             old_t.cancel()
 
-        new_t = threading.Timer(state.AUTO_REPLY_DELAY, auto_reply, args=(chat_id, bc_id))
+        new_t = threading.Timer(state.AUTO_REPLY_DELAY, auto_reply, args=(chat_id, from_user_id, bc_id))
         state.auto_reply_timers[chat_id] = new_t
         new_t.start()

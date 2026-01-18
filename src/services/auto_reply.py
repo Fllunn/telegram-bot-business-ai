@@ -7,7 +7,7 @@ from ..utils.logger import logger
 from .gpt_service import generate_bot_answer
 
 
-def auto_reply(chat_id: int, bc_id: str) -> None:
+def auto_reply(chat_id: int, user_id: int, bc_id: str) -> None:
     """
     Функция, срабатывающая через AUTO_REPLY_DELAY секунд, если владелец не ответил.
     Формирует ответ с помощью ИИ и отправляет в чат.
@@ -30,4 +30,4 @@ def auto_reply(chat_id: int, bc_id: str) -> None:
     if message.content_type == "text":
         user_text = message.text
         gpt_answer = generate_bot_answer(chat_id, user_text)
-        bot.send_message(chat_id=chat_id, text=gpt_answer, business_connection_id=bc_id)
+        bot.send_message(chat_id=user_id, text=gpt_answer, business_connection_id=bc_id)
