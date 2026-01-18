@@ -132,3 +132,4 @@ Thumbs.db
 # Project specific
 *.txt.bak
 config.local.py
+chat_histories.json
