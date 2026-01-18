@@ -4,7 +4,7 @@ import time
 import telebot
 
 from ..bot.client import bot
-from ..config.settings import OWNER_ID
+from ..config.settings import OWNER_ID, is_user_allowed
 from ..core.state import AUTO_REPLY_DELAY, auto_reply_enabled, auto_reply_timers, last_client_message, messages_log
 from ..services.auto_reply import auto_reply
 
@@ -25,6 +25,10 @@ def handle_business_message(message: telebot.types.Message) -> None:
     """
     Обрабатывает новые бизнес-сообщения логирует их и при необходимости запускает таймер для автоответа.
     """
+    # Проверяем доступ пользователя
+    if not is_user_allowed(message.from_user.id):
+        return
+    
     chat_id = message.chat.id
     bc_id = message.business_connection_id
     from_user_id = message.from_user.id

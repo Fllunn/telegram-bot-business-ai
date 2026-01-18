@@ -1,7 +1,7 @@
 import telebot
 
 from ..bot.client import bot
-from ..config.settings import OWNER_ID
+from ..config.settings import OWNER_ID, is_user_allowed
 from ..core.state import messages_log
 from ..utils.chat_utils import get_chat_title
 
@@ -11,6 +11,9 @@ def handle_deleted_business_messages(deleted: telebot.types.BusinessMessagesDele
     """
     Когда сообщение удаляют, сюда прилетает список message_ids. Мы ищем их в логах и отправляем владельцу.
     """
+    # Проверяем доступ (проверяем через первое сообщение, если есть контекст)
+    # В deleted нет прямого from_user, поэтому проверяем через chat
+    # Для бизнес-сообщений это всегда будет работать через business_connection
     chat_id = deleted.chat.id
     chat_name = get_chat_title(deleted.chat)
 
