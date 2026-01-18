@@ -1,8 +1,8 @@
 import telebot
 
 from ..bot.client import bot
-from ..config.settings import OWNER_ID, is_user_allowed
-from ..core.state import messages_log
+from ..config.settings import OWNER_ID
+from ..core import state
 from ..utils.chat_utils import get_chat_title
 
 
@@ -18,7 +18,7 @@ def handle_deleted_business_messages(deleted: telebot.types.BusinessMessagesDele
     chat_name = get_chat_title(deleted.chat)
 
     for msg_id in deleted.message_ids:
-        data = messages_log.pop((chat_id, msg_id), None)
+        data = state.messages_log.pop((chat_id, msg_id), None)
         if not data:
             text_for_owner = (
                 "Сообщение удалено, но бот не успел залогировать.\n"

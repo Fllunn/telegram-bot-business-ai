@@ -7,16 +7,22 @@ from ..core import state
 
 @bot.message_handler(commands=["enable_auto"])
 def enable_auto_handler(message: telebot.types.Message) -> None:
+    print(f"[COMMAND] /enable_auto from user_id={message.from_user.id}")
     if not is_user_allowed(message.from_user.id):
+        print(f"[COMMAND] User {message.from_user.id} NOT ALLOWED for /enable_auto")
         return
+    print(f"[COMMAND] User {message.from_user.id} ALLOWED - enabling auto reply")
     state.auto_reply_enabled = True
     bot.reply_to(message, "Автоответ теперь ВКЛЮЧЕН для всех чатов.")
 
 
 @bot.message_handler(commands=["disable_auto"])
 def disable_auto_handler(message: telebot.types.Message) -> None:
+    print(f"[COMMAND] /disable_auto from user_id={message.from_user.id}")
     if not is_user_allowed(message.from_user.id):
+        print(f"[COMMAND] User {message.from_user.id} NOT ALLOWED for /disable_auto")
         return
+    print(f"[COMMAND] User {message.from_user.id} ALLOWED - disabling auto reply")
     state.auto_reply_enabled = False
     bot.reply_to(message, "Автоответ теперь ВЫКЛЮЧЕН для всех чатов.")
 

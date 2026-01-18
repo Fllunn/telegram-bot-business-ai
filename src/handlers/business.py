@@ -4,8 +4,8 @@ import time
 import telebot
 
 from ..bot.client import bot
-from ..config.settings import OWNER_ID, is_user_allowed
-from ..core.state import AUTO_REPLY_DELAY, auto_reply_enabled, auto_reply_timers, last_client_message, messages_log
+from ..config.settings import OWNER_ID
+from ..core import state
 from ..services.auto_reply import auto_reply
 
 
@@ -25,9 +25,15 @@ def handle_business_message(message: telebot.types.Message) -> None:
     """
     Обрабатывает новые бизнес-сообщения логирует их и при необходимости запускает таймер для автоответа.
     """
-    # Проверяем доступ пользователя
-    if not is_user_allowed(message.from_user.id):
-        return
+    # print(f"\n[BUSINESS_MESSAGE_RECEIVED]")
+    # print(f"  from_user.id: {message.from_user.id}")
+    # print(f"  from_user.username: {message.from_user.username}")
+    # print(f"  chat.id: {message.chat.id}")
+    # print(f"  business_connection_id: {message.business_connection_id}")
+    # print(f"  message_id: {message.message_id}")
+    # print(f"  content_type: {message.content_type}")
+    # if message.content_type == "text":
+    #     print(f"  text: {message.text}")
     
     chat_id = message.chat.id
     bc_id = message.business_connection_id
@@ -74,27 +80,27 @@ def handle_business_message(message: telebot.types.Message) -> None:
     else:
         log_data["content"] = f"[{ctype}]"
 
-    messages_log[(chat_id, message.message_id)] = log_data
+    state.messages_log[(chat_id, message.message_id)] = log_data
 
     if from_user_id == OWNER_ID:
-        if chat_id in auto_reply_timers:
-            t = auto_reply_timers.pop(chat_id)
+        if chat_id in state.auto_reply_timers:
+            t = state.auto_reply_timers.pop(chat_id)
             t.cancel()
             print(f"[Cancel Timer] Владелец ответил сам, отменяем таймер в чате {chat_id}.")
         return
 
-    if not auto_reply_enabled:
+    if not state.auto_reply_enabled:
         print("[BusinessMessage] Автоответ выключен, выходим.")
         return
 
     if ctype == "text":
-        last_client_message[chat_id] = (message, time.time())
-        if chat_id in auto_reply_timers:
-            old_t = auto_reply_timers.pop(chat_id)
+        state.last_client_message[chat_id] = (message, time.time())
+        if chat_id in state.auto_reply_timers:
+            old_t = state.auto_reply_timers.pop(chat_id)
             old_t.cancel()
 
-        new_t = threading.Timer(AUTO_REPLY_DELAY, auto_reply, args=(chat_id, bc_id))
-        auto_reply_timers[chat_id] = new_t
+        new_t = threading.Timer(state.AUTO_REPLY_DELAY, auto_reply, args=(chat_id, bc_id))
+        state.auto_reply_timers[chat_id] = new_t
         new_t.start()
     else:
         pass

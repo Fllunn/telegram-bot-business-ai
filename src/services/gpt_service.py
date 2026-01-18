@@ -1,5 +1,5 @@
 from ..bot.client import openai_client
-from ..core.state import chat_histories
+from ..core import state
 from ..storage.persistence import save_chat_histories_to_json
 from ..config.prompts import SYSTEM_PROMPT, AI_MODEL
 
@@ -15,7 +15,7 @@ def build_gpt_messages(chat_id: int) -> list:
             "content": SYSTEM_PROMPT,
         }
     ]
-    for role, content in chat_histories[chat_id]:
+    for role, content in state.chat_histories[chat_id]:
         messages_for_gpt.append({"role": role, "content": content})
     return messages_for_gpt
 
@@ -24,7 +24,7 @@ def generate_bot_answer(chat_id: int, user_text: str) -> str:
     """
     Генерация ответа через OpenAI ChatCompletion.
     """
-    chat_histories[chat_id].append(("user", user_text))
+    state.chat_histories[chat_id].append(("user", user_text))
     gpt_messages = build_gpt_messages(chat_id)
 
     try:
@@ -39,6 +39,6 @@ def generate_bot_answer(chat_id: int, user_text: str) -> str:
         print(f"[OpenAI Error] {e}")
         gpt_answer = "Извините, но ИИ сейчас молчит..."
 
-    chat_histories[chat_id].append(("assistant", gpt_answer))
+    state.chat_histories[chat_id].append(("assistant", gpt_answer))
     save_chat_histories_to_json("chat_histories.json")
     return gpt_answer

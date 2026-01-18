@@ -1,8 +1,8 @@
 import telebot
 
 from ..bot.client import bot
-from ..config.settings import OWNER_ID, is_user_allowed
-from ..core.state import messages_log
+from ..config.settings import OWNER_ID
+from ..core import state
 from ..utils.chat_utils import get_chat_title
 
 
@@ -22,11 +22,7 @@ def handle_edited_business_message(message: telebot.types.Message) -> None:
     """
     Обрабатываем отредактированные сообщения узнаём, что было до, что стало, сообщаем владельцу.
     """
-    # Проверяем доступ пользователя
-    if not is_user_allowed(message.from_user.id):
-        return
-    
-    old_data = messages_log.get((message.chat.id, message.message_id), {})
+    old_data = state.messages_log.get((message.chat.id, message.message_id), {})
     old_desc = f"{old_data.get('type', '?')}: {old_data.get('content', '?')}"
 
     new_data = {}
@@ -37,7 +33,7 @@ def handle_edited_business_message(message: telebot.types.Message) -> None:
     else:
         new_data["content"] = f"[edited {ctype}]"
 
-    messages_log[(message.chat.id, message.message_id)] = new_data
+    state.messages_log[(message.chat.id, message.message_id)] = new_data
     chat_name = get_chat_title(message.chat)
 
     notify_text = (
