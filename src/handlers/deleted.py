@@ -1,7 +1,7 @@
 import telebot
 
 from ..bot.client import bot
-from ..config.settings import OWNER_ID
+from ..config.settings import OWNER_IDS
 from ..core import state
 from ..utils.chat_utils import get_chat_title
 
@@ -24,7 +24,8 @@ def handle_deleted_business_messages(deleted: telebot.types.BusinessMessagesDele
                 "Сообщение удалено, но бот не успел залогировать.\n"
                 f"Чат: {chat_name}, msg_id={msg_id}"
             )
-            bot.send_message(OWNER_ID, text_for_owner)
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
             continue
 
         ctype = data.get("type", "unknown")
@@ -39,34 +40,45 @@ def handle_deleted_business_messages(deleted: telebot.types.BusinessMessagesDele
 
         if ctype == "text":
             text_for_owner += f"Текст: {content}"
-            bot.send_message(OWNER_ID, text_for_owner)
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
         elif ctype == "photo":
-            bot.send_message(OWNER_ID, text_for_owner)
-            bot.send_photo(OWNER_ID, content, caption=f"[deleted photo] {caption}")
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
+                bot.send_photo(owner_id, content, caption=f"[deleted photo] {caption}")
         elif ctype == "video":
-            bot.send_message(OWNER_ID, text_for_owner)
-            bot.send_video(OWNER_ID, content, caption=f"[deleted video] {caption}")
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
+                bot.send_video(owner_id, content, caption=f"[deleted video] {caption}")
         elif ctype == "document":
-            bot.send_message(OWNER_ID, text_for_owner)
-            bot.send_document(OWNER_ID, content, caption=f"[deleted doc] {caption}")
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
+                bot.send_document(owner_id, content, caption=f"[deleted doc] {caption}")
         elif ctype == "voice":
-            bot.send_message(OWNER_ID, text_for_owner)
-            bot.send_voice(OWNER_ID, content)
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
+                bot.send_voice(owner_id, content)
         elif ctype == "audio":
-            bot.send_message(OWNER_ID, text_for_owner)
-            bot.send_audio(OWNER_ID, content)
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
+                bot.send_audio(owner_id, content)
         elif ctype == "animation":
-            bot.send_message(OWNER_ID, text_for_owner)
-            bot.send_animation(OWNER_ID, content, caption=f"[deleted animation] {caption}")
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
+                bot.send_animation(owner_id, content, caption=f"[deleted animation] {caption}")
         elif ctype == "sticker":
-            bot.send_message(OWNER_ID, text_for_owner)
-            bot.send_sticker(OWNER_ID, content)
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
+                bot.send_sticker(owner_id, content)
         elif ctype == "location":
             text_for_owner += f"Данные: {content}"
-            bot.send_message(OWNER_ID, text_for_owner)
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
         elif ctype == "contact":
             text_for_owner += f"Данные: {content}"
-            bot.send_message(OWNER_ID, text_for_owner)
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)
         else:
             text_for_owner += f"Данные: {content}"
-            bot.send_message(OWNER_ID, text_for_owner)
+            for owner_id in OWNER_IDS:
+                bot.send_message(owner_id, text_for_owner, parse_mode=None)

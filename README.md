@@ -2,4 +2,5 @@
 
 - Зависимости: `pip install -r requirements.txt`
 
+
 - Запуск: `python -m src.main`

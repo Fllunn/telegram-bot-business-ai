@@ -39,3 +39,4 @@ def handle_start_help(message: telebot.types.Message) -> None:
         "/enable_auto – включить автоответ во всех чатах\n"
         "/disable_auto – выключить автоответ во всех чатах",
     )
+

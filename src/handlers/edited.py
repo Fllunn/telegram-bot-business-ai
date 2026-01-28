@@ -1,7 +1,7 @@
 import telebot
 
 from ..bot.client import bot
-from ..config.settings import OWNER_ID
+from ..config.settings import OWNER_IDS
 from ..core import state
 from ..utils.chat_utils import get_chat_title
 
@@ -42,4 +42,5 @@ def handle_edited_business_message(message: telebot.types.Message) -> None:
         f"Новое: {new_data['content']}\n"
         f"Чат: {chat_name}"
     )
-    bot.send_message(OWNER_ID, notify_text)
+    for owner_id in OWNER_IDS:
+        bot.send_message(owner_id, notify_text, parse_mode="HTML")

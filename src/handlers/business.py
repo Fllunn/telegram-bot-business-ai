@@ -4,7 +4,7 @@ import time
 import telebot
 
 from ..bot.client import bot
-from ..config.settings import OWNER_ID
+from ..config.settings import is_owner
 from ..core import state
 from ..utils.logger import logger
 from ..services.auto_reply import auto_reply
@@ -73,7 +73,7 @@ def handle_business_message(message: telebot.types.Message) -> None:
 
     state.messages_log[(chat_id, message.message_id)] = log_data
 
-    if from_user_id == OWNER_ID:
+    if is_owner(from_user_id):
         if chat_id in state.auto_reply_timers:
             t = state.auto_reply_timers.pop(chat_id)
             t.cancel()
