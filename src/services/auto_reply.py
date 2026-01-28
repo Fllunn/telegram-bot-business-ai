@@ -130,7 +130,7 @@ def auto_reply(chat_id: int, user_id: int, bc_id: str) -> None:
                 owner_message += f"👤 Имя: {user_name}\n"
                 # owner_message += f"🔗 Ссылка: {chat_link}\n"
                 # owner_message += f"📝 ID: {user_id}\n\n"
-                owner_message += f"\nДанные заявки:\n{clean_gpt_answer}".replace("Скоро подключится администратор и запишет вас, если есть свободные слоты.", "")
+                owner_message += f"\nДанные заявки:\n{clean_gpt_answer}"
                 
                 # Отправляем сообщение всем владельцам
                 for owner_id in OWNER_IDS:

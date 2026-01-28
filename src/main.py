@@ -1,6 +1,7 @@
 from .bot.client import bot
 from . import handlers  # registers command handlers
-from .handlers import business, edited, deleted  # registers message handlers
+# from .handlers import business, edited, deleted  # registers message handlers
+from .handlers import business  # registers message handlers
 from .utils.logger import logger
 
 
