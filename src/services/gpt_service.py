@@ -109,7 +109,7 @@ def generate_bot_answer(chat_id: int, user_text: str) -> str:
         gpt_answer = response.choices[0].message.content.strip()
     except Exception as e:  # noqa: BLE001
         logger.error(f"OpenAI API error: {e}")
-        gpt_answer = "Извините, сейчас с ИИ какие-то проблемы. Попробуйте позже."
+        gpt_answer = "Извините, сейчас с ИИ какие-то проблемы. Скоро подключится администратор и запишет вас, если есть свободные слоты."
 
     # Парсим ответ и обновляем данные бронирования
     extracted_data = extract_booking_data(gpt_answer)
