@@ -93,6 +93,17 @@ def auto_reply(chat_id: int, user_id: int, bc_id: str) -> None:
 
     if message.content_type == "text":
         user_text = message.text
+        
+        # Проверка длины сообщения - не более 200 символов
+        if len(user_text) > 200:
+            bot.send_message(
+                chat_id=user_id,
+                text="Здравствуйте! Для записи напишите, какую услугу хотите, к какому мастеру и когда. Пожалуйста, отправляйте сообщения длиной не более 200 символов.",
+                business_connection_id=bc_id,
+                parse_mode=None
+            )
+            return
+        
         gpt_answer = generate_bot_answer(chat_id, user_text)
         
         # Удаляем служебные строки перед отправкой пользователю
