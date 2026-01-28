@@ -119,17 +119,18 @@ def auto_reply(chat_id: int, user_id: int, bc_id: str) -> None:
                     user_name = "Пользователь"
                     username = None
                 
-                # Формируем ссылку на чат
-                chat_link = f"tg://user?id={user_id}"
+                # Формируем ссылку на пользователя
+                if username:
+                    user_link = f'<a href="https://t.me/{username}">{user_name}</a>'
+                else:
+                    user_link = f'<a href="tg://user?id={user_id}">{user_name}</a>'
                 
                 # Очищаем ответ ИИ для владельца (удаляем служебные строки)
                 clean_gpt_answer = remove_booking_info_from_message(gpt_answer)
                 
                 # Формируем сообщение с информацией о чате
                 owner_message = f"🔔 Новая заявка от клиента:\n\n"
-                owner_message += f"👤 Имя: {user_name}\n"
-                # owner_message += f"🔗 Ссылка: {chat_link}\n"
-                # owner_message += f"📝 ID: {user_id}\n\n"
+                owner_message += f"👤 Клиент: {user_link}\n"
                 owner_message += f"\nДанные заявки:\n{clean_gpt_answer}"
                 
                 # Отправляем сообщение всем владельцам
@@ -137,7 +138,7 @@ def auto_reply(chat_id: int, user_id: int, bc_id: str) -> None:
                     bot.send_message(
                         chat_id=owner_id,
                         text=owner_message,
-                        parse_mode=None
+                        parse_mode='HTML'
                     )
             except Exception as e:
                 pass
