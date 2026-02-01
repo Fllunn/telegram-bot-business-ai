@@ -104,8 +104,10 @@ def generate_bot_answer(chat_id: int, user_text: str) -> str:
             model=AI_MODEL,
             messages=gpt_messages,
             max_tokens=300,
+            # max_completion_tokens=300,
             temperature=0.7,
         )
+        # print(response)
         gpt_answer = response.choices[0].message.content.strip()
     except Exception as e:  # noqa: BLE001
         logger.error(f"OpenAI API error: {e}")
